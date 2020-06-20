@@ -428,8 +428,15 @@ var QueryBuilder = function($el, options) {
     }
     this.status.id = this.$el.attr('id');
 
+    console.log(this.$el)
+    console.log(options)
     // INIT
-    this.$el.addClass('query-builder form-inline');
+    console.log(options)
+    if(options.hasOwnProperty("isInline") && options.isInline == true){
+        this.$el.addClass('query-builder form-inline');
+    }else{
+        this.$el.addClass('query-builder');
+    }
 
     this.filters = this.checkFilters(this.filters);
     this.operators = this.checkOperators(this.operators);
@@ -653,7 +660,7 @@ QueryBuilder.DEFAULTS = {
     conditions: ['AND', 'OR'],
     default_condition: 'AND',
     inputs_separator: ' , ',
-    select_placeholder: '------',
+    select_placeholder: 'N/A',
     display_empty_filter: true,
     default_filter: null,
     optgroups: {},
@@ -4694,9 +4701,9 @@ QueryBuilder.define('invert', function(options) {
         this.on('getGroupTemplate.filter', function(h) {
             var $h = $(h.value);
             $h.find(Selectors.condition_container).after(
-                '<button type="button" class="btn btn-sm btn-dark" data-invert="group">' +
+                '<label type="button" class="btn btn-sm btn-dark mb-2" data-invert="group">' +
                 '<i class="' + options.icon + '"></i> ' + self.translate('invert') +
-                '</button>'
+                '</label>'
             );
             h.value = $h.prop('outerHTML');
         });
@@ -4705,9 +4712,9 @@ QueryBuilder.define('invert', function(options) {
             this.on('getRuleTemplate.filter', function(h) {
                 var $h = $(h.value);
                 $h.find(Selectors.rule_actions).prepend(
-                    '<button type="button" class="btn btn-sm btn-dark" data-invert="rule">' +
+                    '<label type="button" class="btn btn-sm btn-dark mb-2" data-invert="rule">' +
                     '<i class="' + options.icon + '"></i> ' + self.translate('invert') +
-                    '</button>'
+                    '</label>'
                 );
                 h.value = $h.prop('outerHTML');
             });
@@ -5257,9 +5264,9 @@ QueryBuilder.define('not-group', function(options) {
         this.on('getGroupTemplate.filter', function(h) {
             var $h = $(h.value);
             $h.find(QueryBuilder.selectors.condition_container).prepend(
-                '<button type="button" class="btn btn-sm btn-dark" data-not="group">' +
+                '<label type="button" class="btn btn-sm btn-dark" data-not="group">' +
                 '<i class="' + options.icon_unchecked + '"></i> ' + self.translate('NOT') +
-                '</button>'
+                '</label>'
             );
             h.value = $h.prop('outerHTML');
         });
@@ -5542,7 +5549,7 @@ QueryBuilder.define('sortable', function(options) {
         this.on('getGroupTemplate.filter', function(h, level) {
             if (level > 1) {
                 var $h = $(h.value);
-                $h.find(QueryBuilder.selectors.condition_container).after('<div class="drag-handle"><i class="' + options.icon + '"></i></div>');
+                $h.find(QueryBuilder.selectors.condition_container).after('<div class="drag-handle mb-2"><i class="' + options.icon + '"></i></div>');
                 h.value = $h.prop('outerHTML');
             }
         });
