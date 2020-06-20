@@ -707,11 +707,11 @@ QueryBuilder.DEFAULTS = {
     ],
 
     icons: {
-        add_group:    'glyphicon glyphicon-plus-sign',
-        add_rule:     'glyphicon glyphicon-plus',
-        remove_group: 'glyphicon glyphicon-remove',
-        remove_rule:  'glyphicon glyphicon-remove',
-        error:        'glyphicon glyphicon-warning-sign'
+        add_group:    'fas fa-plus-circle',
+        add_rule:     'fas fa-plus',
+        remove_group: 'fas fa-times',
+        remove_rule:  'fas fa-times',
+        error:        'fas fa-exclamation-triangle'
     }
 };
 
@@ -2962,24 +2962,24 @@ QueryBuilder.prototype.getValidationMessage = function(validation, type, def) {
 QueryBuilder.templates.group = '\
 <div id="{{= it.group_id }}" class="rules-group-container"> \
   <div class="rules-group-header"> \
-    <div class="btn-group pull-right group-actions"> \
-      <button type="button" class="btn btn-xs btn-success" data-add="rule"> \
+    <div class="btn-group float-right group-actions"> \
+      <button type="button" class="btn btn-sm btn-success" data-add="rule"> \
         <i class="{{= it.icons.add_rule }}"></i> {{= it.translate("add_rule") }} \
       </button> \
       {{? it.settings.allow_groups===-1 || it.settings.allow_groups>=it.level }} \
-        <button type="button" class="btn btn-xs btn-success" data-add="group"> \
+        <button type="button" class="btn btn-sm btn-success" data-add="group"> \
           <i class="{{= it.icons.add_group }}"></i> {{= it.translate("add_group") }} \
         </button> \
       {{?}} \
       {{? it.level>1 }} \
-        <button type="button" class="btn btn-xs btn-danger" data-delete="group"> \
+        <button type="button" class="btn btn-sm btn-danger" data-delete="group"> \
           <i class="{{= it.icons.remove_group }}"></i> {{= it.translate("delete_group") }} \
         </button> \
       {{?}} \
     </div> \
     <div class="btn-group group-conditions"> \
       {{~ it.conditions: condition }} \
-        <label class="btn btn-xs btn-primary"> \
+        <label class="btn btn-sm btn-info"> \
           <input type="radio" name="{{= it.group_id }}_cond" value="{{= condition }}"> {{= it.translate("conditions", condition) }} \
         </label> \
       {{~}} \
@@ -2996,8 +2996,8 @@ QueryBuilder.templates.group = '\
 QueryBuilder.templates.rule = '\
 <div id="{{= it.rule_id }}" class="rule-container"> \
   <div class="rule-header"> \
-    <div class="btn-group pull-right rule-actions"> \
-      <button type="button" class="btn btn-xs btn-danger" data-delete="rule"> \
+    <div class="btn-group float-right rule-actions"> \
+      <button type="button" class="btn btn-sm btn-danger" data-delete="rule"> \
         <i class="{{= it.icons.remove_rule }}"></i> {{= it.translate("delete_rule") }} \
       </button> \
     </div> \
@@ -4192,10 +4192,6 @@ $.fn.queryBuilder.regional = QueryBuilder.regional;
  * @param {string} [options.color='default']
  */
 QueryBuilder.define('bt-checkbox', function(options) {
-    if (options.font == 'glyphicons') {
-        this.$el.addClass('bt-checkbox-glyphicons');
-    }
-
     this.on('getRuleInput.filter', function(h, rule, name) {
         var filter = rule.filter;
 
@@ -4217,16 +4213,13 @@ QueryBuilder.define('bt-checkbox', function(options) {
                 var id = name + '_' + (i++);
 
                 h.value+= '\
-<div' + style + ' class="' + filter.input + ' ' + filter.input + '-' + color + '"> \
-  <input type="' + filter.input + '" name="' + name + '" id="' + id + '" value="' + key + '"> \
-  <label for="' + id + '">' + val + '</label> \
+<div' + style + ' class="custom-control custom-' + filter.input + '"> \
+  <input type="' + filter.input + '" name="' + name + '" id="' + id + '" value="' + key + '" class="custom-control-input"> \
+  <label for="' + id + '" class="custom-control-label">' + val + '</label> \
 </div>';
             });
         }
     });
-}, {
-    font: 'glyphicons',
-    color: 'default'
 });
 
 
@@ -4236,7 +4229,7 @@ QueryBuilder.define('bt-checkbox', function(options) {
  * @descriptioon Applies Bootstrap Select on filters and operators combo-boxes.
  * @param {object} [options]
  * @param {string} [options.container='body']
- * @param {string} [options.style='btn-inverse btn-xs']
+ * @param {string} [options.style='btn-inverse btn-sm']
  * @param {int|string} [options.width='auto']
  * @param {boolean} [options.showIcon=false]
  * @throws MissingLibraryError
@@ -4247,7 +4240,7 @@ QueryBuilder.define('bt-selectpicker', function(options) {
     }
 
     var Selectors = QueryBuilder.selectors;
-
+    console.log(options)
     // init selectpicker
     this.on('afterCreateRuleFilters', function(e, rule) {
         rule.$el.find(Selectors.rule_filter).removeClass('form-control').selectpicker(options);
@@ -4272,9 +4265,10 @@ QueryBuilder.define('bt-selectpicker', function(options) {
     });
 }, {
     container: 'body',
-    style: 'btn-inverse btn-xs',
+    style: 'btn-inverse btn-sm btn-light',
     width: 'auto',
-    showIcon: false
+    showIcon: false,
+
 });
 
 
@@ -4582,7 +4576,7 @@ QueryBuilder.define('filter-description', function(options) {
             }
             else {
                 if ($b.length === 0) {
-                    $b = $('<button type="button" class="btn btn-xs btn-info filter-description" data-toggle="popover"><i class="' + options.icon + '"></i></button>');
+                    $b = $('<button type="button" class="btn btn-sm btn-info filter-description" data-toggle="popover"><i class="' + options.icon + '"></i></button>');
                     $b.prependTo(rule.$el.find(QueryBuilder.selectors.rule_actions));
 
                     $b.popover({
@@ -4622,7 +4616,7 @@ QueryBuilder.define('filter-description', function(options) {
             }
             else {
                 if ($b.length === 0) {
-                    $b = $('<button type="button" class="btn btn-xs btn-info filter-description" data-toggle="bootbox"><i class="' + options.icon + '"></i></button>');
+                    $b = $('<button type="button" class="btn btn-sm btn-info filter-description" data-toggle="bootbox"><i class="' + options.icon + '"></i></button>');
                     $b.prependTo(rule.$el.find(QueryBuilder.selectors.rule_actions));
 
                     $b.on('click', function() {
@@ -4699,7 +4693,7 @@ QueryBuilder.define('invert', function(options) {
         this.on('getGroupTemplate.filter', function(h) {
             var $h = $(h.value);
             $h.find(Selectors.condition_container).after(
-                '<button type="button" class="btn btn-xs btn-default" data-invert="group">' +
+                '<button type="button" class="btn btn-sm btn-dark" data-invert="group">' +
                 '<i class="' + options.icon + '"></i> ' + self.translate('invert') +
                 '</button>'
             );
@@ -4710,7 +4704,7 @@ QueryBuilder.define('invert', function(options) {
             this.on('getRuleTemplate.filter', function(h) {
                 var $h = $(h.value);
                 $h.find(Selectors.rule_actions).prepend(
-                    '<button type="button" class="btn btn-xs btn-default" data-invert="rule">' +
+                    '<button type="button" class="btn btn-sm btn-dark" data-invert="rule">' +
                     '<i class="' + options.icon + '"></i> ' + self.translate('invert') +
                     '</button>'
                 );
@@ -4719,7 +4713,7 @@ QueryBuilder.define('invert', function(options) {
         }
     }
 }, {
-    icon: 'glyphicon glyphicon-random',
+    icon: 'fas fa-random',
     recursive: true,
     invert_rules: true,
     display_rules_button: false,
@@ -5262,7 +5256,7 @@ QueryBuilder.define('not-group', function(options) {
         this.on('getGroupTemplate.filter', function(h) {
             var $h = $(h.value);
             $h.find(QueryBuilder.selectors.condition_container).prepend(
-                '<button type="button" class="btn btn-xs btn-default" data-not="group">' +
+                '<button type="button" class="btn btn-sm btn-dark" data-not="group">' +
                 '<i class="' + options.icon_unchecked + '"></i> ' + self.translate('NOT') +
                 '</button>'
             );
@@ -5340,8 +5334,8 @@ QueryBuilder.define('not-group', function(options) {
         e.value.not = !!data.not;
     });
 }, {
-    icon_unchecked: 'glyphicon glyphicon-unchecked',
-    icon_checked: 'glyphicon glyphicon-check',
+    icon_unchecked: 'far fa-times-circle',
+    icon_checked: 'far fa-check-circle',
     disable_template: false
 });
 
@@ -5561,7 +5555,7 @@ QueryBuilder.define('sortable', function(options) {
 }, {
     inherit_no_sortable: true,
     inherit_no_drop: true,
-    icon: 'glyphicon glyphicon-sort',
+    icon: 'fas fa-sort',
     disable_template: false
 });
 
