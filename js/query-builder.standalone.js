@@ -4240,7 +4240,7 @@ QueryBuilder.define('bt-selectpicker', function(options) {
     }
 
     var Selectors = QueryBuilder.selectors;
-    console.log(options)
+
     // init selectpicker
     this.on('afterCreateRuleFilters', function(e, rule) {
         rule.$el.find(Selectors.rule_filter).removeClass('form-control').selectpicker(options);
@@ -4281,7 +4281,7 @@ QueryBuilder.define('bt-selectpicker', function(options) {
  * @throws MissingLibraryError
  */
 QueryBuilder.define('bt-tooltip-errors', function(options) {
-    if (!$.fn.tooltip || !$.fn.tooltip.Constructor || !$.fn.tooltip.Constructor.prototype.fixTitle) {
+    if (!$.fn.tooltip || !$.fn.tooltip.Constructor || !$.fn.tooltip.Constructor.prototype._fixTitle) {
         Utils.error('MissingLibrary', 'Bootstrap Tooltip is required to use "bt-tooltip-errors" plugin. Get it here: http://getbootstrap.com');
     }
 
@@ -4300,7 +4300,7 @@ QueryBuilder.define('bt-tooltip-errors', function(options) {
             node.$el.find(QueryBuilder.selectors.error_container).eq(0)
                 .tooltip(options)
                 .tooltip('hide')
-                .tooltip('fixTitle');
+                .tooltip('_fixTitle');
         }
     });
 }, {
@@ -4559,7 +4559,7 @@ QueryBuilder.define('filter-description', function(options) {
     }
     // POPOVER
     else if (options.mode === 'popover') {
-        if (!$.fn.popover || !$.fn.popover.Constructor || !$.fn.popover.Constructor.prototype.fixTitle) {
+        if (!$.fn.popover || !$.fn.popover.Constructor || !$.fn.popover.Constructor.prototype._fixTitle) {
             Utils.error('MissingLibrary', 'Bootstrap Popover is required to use "filter-description" plugin. Get it here: http://getbootstrap.com');
         }
 
@@ -4575,8 +4575,9 @@ QueryBuilder.define('filter-description', function(options) {
                 }
             }
             else {
+
                 if ($b.length === 0) {
-                    $b = $('<button type="button" class="btn btn-sm btn-info filter-description" data-toggle="popover"><i class="' + options.icon + '"></i></button>');
+                    $b = $('<button type="button" class="btn btn-sm btn-info filter-description" data-toggle="popover" title="" data-content="And heres some amazing content. Its very engaging. Right?"><i class="' + options.icon + '"></i></button>');
                     $b.prependTo(rule.$el.find(QueryBuilder.selectors.rule_actions));
 
                     $b.popover({
@@ -4593,7 +4594,7 @@ QueryBuilder.define('filter-description', function(options) {
                     $b.css('display', '');
                 }
 
-                $b.data('bs.popover').options.content = description;
+                $b.attr('data-content',description)
 
                 if ($b.attr('aria-describedby')) {
                     $b.popover('show');
@@ -4632,7 +4633,7 @@ QueryBuilder.define('filter-description', function(options) {
         });
     }
 }, {
-    icon: 'glyphicon glyphicon-info-sign',
+    icon: 'far fa-question-circle',
     mode: 'popover'
 });
 
